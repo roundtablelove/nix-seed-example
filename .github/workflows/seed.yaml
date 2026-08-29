@@ -1,0 +1,29 @@
+name: seed
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - flake.lock
+  workflow_dispatch:
+
+jobs:
+  seed:
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    strategy:
+      matrix:
+        os:
+          - macos-15
+          - macos-15-intel
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: roundtablelove/nix-seed/seed
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
