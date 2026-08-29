@@ -26,7 +26,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - uses: roundtablelove/nix-seed
+      - uses: roundtablelove/nix-seed@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           cachix_cache: <name>
