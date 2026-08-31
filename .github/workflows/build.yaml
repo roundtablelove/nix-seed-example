@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read
       id-token: write
@@ -31,5 +31,5 @@ jobs:
       - uses: roundtablelove/nix-seed@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          cachix_name: <name>
+          cachix_name: nix-seed-example
           cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
