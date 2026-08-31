@@ -1,0 +1,23 @@
+name: build-cachix
+
+on:
+  push:
+
+jobs:
+  build:
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v17
+        with:
+          name: nix-seed-example
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: nix build --print-build-logs
