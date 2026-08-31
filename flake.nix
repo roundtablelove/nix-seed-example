@@ -4,6 +4,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-seed = {
       url = "github:roundtablelove/nix-seed";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        mkdocs-flake.inputs.pyproject-nix.follows = "pyproject-nix";
+      };
+    };
+    pyproject-nix = {
+      url = "github:kingarrrt/pyproject.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -17,19 +24,23 @@
         system:
         let
           pkgs = inputs.nixpkgs.legacyPackages.${system};
+          project = inputs.pyproject-nix.lib.project.loadPyproject {
+            projectRoot = ./.;
+          };
+          python = builtins.head (
+            inputs.pyproject-nix.lib.util.filterPythonInterpreters {
+              inherit (project) requires-python;
+              inherit (pkgs) pythonInterpreters;
+            }
+          );
         in
         {
 
-          default = pkgs.stdenv.mkDerivation {
-            pname = "cpp-boost-example";
-            version = "0.1.0";
-            src = ./.;
-            nativeBuildInputs = with pkgs; [
-              cmake
-              ninja
-            ];
-            buildInputs = with pkgs; [ boost ];
-          };
+          default = python.pkgs.buildPythonPackage (
+            pkgs.lib.recursiveUpdate (project.renderers.buildPythonPackage {
+              inherit python;
+            }) { meta.mainProgram = "hello"; }
+          );
 
           seed = inputs.nix-seed.lib.mkSeed {
             inherit pkgs;
