@@ -1,0 +1,26 @@
+name: build-cache-nix
+
+on:
+  push:
+
+jobs:
+  build:
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      # cache-nix-action needs a runner-writable store, hence
+      # nix-quick-install-action rather than install-nix-action
+      - uses: nixbuild/nix-quick-install-action@v35
+      - uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: nix-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.nix', 'flake.lock')
+            }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-
+      - run: nix build --print-build-logs
