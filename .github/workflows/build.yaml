@@ -1,9 +1,12 @@
+name: build
+
 on:
   push:
     branches:
       - master
     paths-ignore:
       - flake.lock
+      - .github/workflows/seed.yaml
   workflow_run:
     workflows:
       - seed
@@ -21,7 +24,7 @@ jobs:
       matrix:
         os:
           - ubuntu-22.04
-          # - ubuntu-22.04-arm
+          - ubuntu-22.04-arm
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
