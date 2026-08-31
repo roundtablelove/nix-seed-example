@@ -1,4 +1,4 @@
-name: build-cache-nix
+name: build-raw-nix
 
 on:
   push:
