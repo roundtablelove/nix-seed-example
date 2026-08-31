@@ -9,6 +9,7 @@ on:
       - seed
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,10 +20,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos-15
-          - macos-15-intel
           - ubuntu-22.04
-          - ubuntu-22.04-arm
+          # - ubuntu-22.04-arm
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
