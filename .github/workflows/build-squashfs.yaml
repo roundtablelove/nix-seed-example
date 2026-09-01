@@ -17,15 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
-      - name: cache key
-        id: k
-        run: |
-          echo "key=fs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', '**/*.nix', 'pyproject.toml') }}" >>"$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         id: cache
         with:
           path: seed-fs
-          key: ${{ steps.k.outputs.key }}
+          key: fs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', '**/*.nix', 'pyproject.toml') }}
       - name: build seed fs
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -47,14 +43,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - name: cache key
-        id: k
-        run: |
-          echo "key=fs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', '**/*.nix', 'pyproject.toml') }}" >>"$GITHUB_OUTPUT"
       - uses: actions/cache/restore@v4
         with:
           path: seed-fs
-          key: ${{ steps.k.outputs.key }}
+          key: fs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', '**/*.nix', 'pyproject.toml') }}
           fail-on-cache-miss: true
       - name: build from squashfs
         run: bash .github/build-fs.sh seed-fs .
