@@ -1,0 +1,60 @@
+name: build-squashfs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # seed side: build the squashfs closure once, publish via the cache
+  seed-fs:
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+      - name: cache key
+        id: k
+        run: |
+          echo "key=fs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', '**/*.nix', 'pyproject.toml') }}" >>"$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: seed-fs
+          key: ${{ steps.k.outputs.key }}
+      - name: build seed fs
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          out=$(nix build --print-build-logs --no-link --print-out-paths .#seed.fs)
+          mkdir -p seed-fs
+          cp -L "$out"/store.squashfs "$out"/registration seed-fs/
+          ls -la seed-fs
+
+  # consumer side: no nix installed; the store arrives via the mount
+  build:
+    needs: seed-fs
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: cache key
+        id: k
+        run: |
+          echo "key=fs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', '**/*.nix', 'pyproject.toml') }}" >>"$GITHUB_OUTPUT"
+      - uses: actions/cache/restore@v4
+        with:
+          path: seed-fs
+          key: ${{ steps.k.outputs.key }}
+          fail-on-cache-miss: true
+      - name: build from squashfs
+        run: bash .github/build-fs.sh seed-fs .

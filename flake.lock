@@ -444,11 +444,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1788188392,
-        "narHash": "sha256-CRNG4iDSyGEmLAvwIcBlvPGHbNlqxHn2ycI97yu0fHw=",
+        "lastModified": 1788220790,
+        "narHash": "sha256-LQcN6pEmOYWEnGrIlKGKM5j/2R4D+Vlkz06rIOhhcgU=",
         "owner": "roundtablelove",
         "repo": "nix-seed",
-        "rev": "222e2696749d914cf4df824760ea79f096bf1644",
+        "rev": "d998f29971203b4b56c35ca8c0c605b8face9425",
         "type": "github"
       },
       "original": {
