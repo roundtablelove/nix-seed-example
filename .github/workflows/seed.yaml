@@ -26,3 +26,4 @@ jobs:
       - uses: roundtablelove/nix-seed/seed@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
