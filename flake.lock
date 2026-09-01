@@ -435,7 +435,6 @@
         "mkdocs-flake": "mkdocs-flake",
         "nix-github-actions": "nix-github-actions",
         "nix-unit": "nix-unit",
-        "nix2container": "nix2container",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -444,11 +443,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1788220790,
-        "narHash": "sha256-LQcN6pEmOYWEnGrIlKGKM5j/2R4D+Vlkz06rIOhhcgU=",
+        "lastModified": 1788223223,
+        "narHash": "sha256-eQkHB9RsC9naac06UzOXy5fyYUNJZh+g36T7vTXQLeY=",
         "owner": "roundtablelove",
         "repo": "nix-seed",
-        "rev": "d998f29971203b4b56c35ca8c0c605b8face9425",
+        "rev": "e45bb2dfb513bc5c9fc7391ecb48e0141e35fac8",
         "type": "github"
       },
       "original": {
@@ -483,27 +482,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "nix-unit",
-        "type": "github"
-      }
-    },
-    "nix2container": {
-      "inputs": {
-        "nixpkgs": [
-          "nix-seed",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1787926012,
-        "narHash": "sha256-9doLKz+fpKYyuOfs+1tIwnEuSSPhg6VsGuvkQYWqm3I=",
-        "owner": "roundtablelove",
-        "repo": "nix2container",
-        "rev": "576c5c7268d9473734ec8018b3d4ef7749612832",
-        "type": "github"
-      },
-      "original": {
-        "owner": "roundtablelove",
-        "repo": "nix2container",
         "type": "github"
       }
     },
